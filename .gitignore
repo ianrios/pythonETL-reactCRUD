@@ -153,3 +153,4 @@ cython_debug/
 
 # Decompressed data
 data/crime.csv
+.outputs/
