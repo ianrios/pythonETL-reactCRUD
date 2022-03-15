@@ -77,13 +77,14 @@ Postgres database. For convenience, we have provided a docker-compose file for a
 be started as follows:
 
 ```bash
-$ EXPORT POSTGRES_USER=etl_user
-$ EXPORT POSTGRES_PASSWORD=nygc-sweng-rocks!
-$ EXPORT POSTGRES_DB=crime_stats
 $ docker compose up db
 ```
 
-Once started, you should have an empty database available at: `jdbc:postgresql://localhost:5432/crime_stats`. We are using
+The credentials are as follows:
+- Username: `nygc-user`
+- Password: `nygc-sweng-rocks!`
+
+Once started, you should have an empty database available at: `jdbc:postgresql://localhost:5432/interview_db`. We are using
 a docker volume so the data should persist between container and host restarts. Feel free to create the schema and import
 the data using any database frameworks and tools you are familiar with.
 
