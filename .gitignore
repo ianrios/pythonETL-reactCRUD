@@ -153,4 +153,7 @@ cython_debug/
 
 # Decompressed data
 data/crime.csv
+
+# Local only files
 .outputs/
+.user/
