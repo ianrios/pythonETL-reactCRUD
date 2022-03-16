@@ -152,7 +152,7 @@ cython_debug/
 #.idea/
 
 # Decompressed data
-data/crime.csv
+data/*.csv
 
 # Local only files
 .outputs/
