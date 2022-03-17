@@ -5,16 +5,17 @@ services:
     build:
       context: .
       dockerfile: dockerfile
+    ports:
+      - "3000:3000"
+      - "5001:5001"
     volumes:
       - .:/workspace
     working_dir: /workspace
     command: tail -f /dev/null
   db:
     image: postgres:14
-    environment:
-      - POSTGRES_USER=nygc-user
-      - POSTGRES_PASSWORD=nygc-sweng-rocks!
-      - POSTGRES_DB=interview_db
+    env_file:
+      - .env
     volumes:
       - db-pgdata:/var/lib/postgresql/data
       - ./sql:/docker-entrypoint-initdb.d

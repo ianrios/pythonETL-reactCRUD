@@ -80,9 +80,7 @@ be started as follows:
 $ docker compose up db
 ```
 
-The credentials are as follows:
-- Username: `nygc-user`
-- Password: `nygc-sweng-rocks!`
+The credentials can be found in the `.env` file at the root of this project.
 
 Once started, you should have an empty database available at: `jdbc:postgresql://localhost:5432/interview_db`. We are using
 a docker volume so the data should persist between container and host restarts. Feel free to create the schema and import
@@ -96,27 +94,69 @@ of the dataset. These sample queries do not have to be exhaustive and are meant 
 the review session.
 
 
-# Assignment 3 - Working with APIs (:construction: Work In Progress :construction:)
+# Assignment 3 - Working with APIs
 
- > This section is currently under construction so please ignore it.
+ This assignment is intended to test your ability to implement features in the Flask web framework while integrating
+ with a Postgres database.
 
- This assignment is intended to test your familiarity with Python's FlaskAPI by having you implement additional API 
- functionality. You will be exposing the data set that was imported in [Assignment 1](#assignment-1---etl-the-data) 
- through new APIs.
-
-
-Install the project's dependencies, then run the flask application:
-
+**First**, start the docker container with the provided Postgres database.
 ```sh
-export FLASK_APP=windy_city_crime
-export FLASK_ENV=development
-flask run
+$ docker-compose up db
 ```
 
+Upon container startup, this database will automatically be populated with a `interview_db.covid_state_stats` table.
+You should connect to the database to make sure the table is there and has data. The database credentials should be
+available in the `.env` file.
 
-# Assignment 4 - Working with React (:construction: Work In Progress :construction:)
+**Next**, install the project's dependencies, then run the flask application:
 
-> This section is currently under construction so please ignore it.
+```sh
+$ python -m api
 
-This assignment is intended to test your proficiency in implementing changes in React based applications.
+# Use provided endpoint to verify that flask is able to establish a tcp connection with the database.
+$ curl http://localhost:5001/covid-stats/test-db-connection
 
+# If debugging the api in docker, add the host=host.docker.internal to the url.
+$ curl http://localhost:5001/covid-stats/test-db-connection?host=host.docker.internal
+```
+
+**Finally**, create a new api endpoint to serve records from the `covid_state_stats` table.
+The database credentials can be found by looking up the environment variables that were injected into flask from `.env`.
+
+```python
+# use host.docker.internal instead of localhost if debugging the api in docker
+# host = "host.docker.internal"
+host = localhost
+port = 5432
+user = os.environ["POSTGRES_USER"]
+password = os.environ["POSTGRES_PASSWORD"]
+db = os.environ["POSTGRES_DB"]
+```
+
+Success criteria:
+- The api endpoint should serve json formatted data.
+- All records from the `covid_state_stats` should be accessible from this endpoint.
+
+
+# Assignment 4 - Working with React
+
+This assignment builds upon [Assignment 3](#assignment-3---working-with-apis) and is intended to test your proficiency
+in implementing features in React based applications. If necessary, the api endpoint may be updated to support features
+from this assignment.
+
+**First**, navigate to the `ui` directory, install the project's dependencies, then run the development server with the
+below command.
+
+```sh
+$ cd ui
+$ npm install
+$ npm start
+```
+
+**Next**, implement a page displaying information from the api endpoint in [Assignment 3](#assignment-3---working-with-apis).
+This page does not have to be aesthetically pleasing, but it should have good usability. Though not required, feel free
+to use any third party tools or libraries to help complete the assignment.
+
+Success criteria
+- The covid data table is paginated. Users may navigate to the `next` or `previous` pages.
+- The user can set "number of rows to display" to 25, 50, or 100
