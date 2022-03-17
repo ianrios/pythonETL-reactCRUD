@@ -104,20 +104,24 @@ the review session.
 $ docker-compose up db
 ```
 
+Upon container startup, this database will automatically be populated with a `interview_db.covid_state_stats` table.
+You should connect to the database to make sure the table is there and has data. The database credentials should be
+available in the `.env` file.
+
 **Next**, install the project's dependencies, then run the flask application:
 
 ```sh
 $ python -m api
 
 # Use provided endpoint to verify that flask is able to establish a tcp connection with the database.
-$ curl http://localhost:5000/covid-stats/test-db-connection
+$ curl http://localhost:5001/covid-stats/test-db-connection
 
 # If debugging the api in docker, add the host=host.docker.internal to the url.
-$ curl http://localhost:5000/covid-stats/test-db-connection?host=host.docker.internal
+$ curl http://localhost:5001/covid-stats/test-db-connection?host=host.docker.internal
 ```
 
-**Finally**, create a new api endpoint to serve covid stats from the database. The database credentials
-can be found by looking up the environment variables that were injected into flask from `.env`.
+**Finally**, create a new api endpoint to serve records from the `covid_state_stats` table.
+The database credentials can be found by looking up the environment variables that were injected into flask from `.env`.
 
 ```python
 # use host.docker.internal instead of localhost if debugging the api in docker
