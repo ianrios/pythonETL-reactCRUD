@@ -134,9 +134,10 @@ db = os.environ["POSTGRES_DB"]
 ```
 
 Success criteria:
-- The api endpoint should serve json formatted data.
-- All records from the `covid_state_stats` should be accessible from this endpoint.
-
+- Records from the `covid_state_stats` table are served via the new endpoint.
+- Records are served in json format.
+- Datetime fields are in the ISO 8601 format.
+- Results are paginated.
 
 # Assignment 4 - Working with React
 
