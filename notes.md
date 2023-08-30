@@ -2,8 +2,11 @@
 
 - [x] Unzip the data from crime.csv.gz to "data/crime.csv" (this does not have to be done in Python).
 - [ ] Update this parse() function to:
-  - [x] Read the data from "data/crime.csv" and parse all the data rows into the CrimeDataRecord class above.
-  - [ ] Convert each CrimeDataRecord to JSON and output it to a corresponding text file in a directory called ".outputs".
+  - [x] Read the data from "data/crime.csv"
+  - [ ] parse all the data rows into the CrimeDataRecord class
+  - [x] create outputs directory
+  - [ ] Convert each CrimeDataRecord to JSON
+  - [ ] output each json blob to a corresponding text file in the outputs directory
   - [ ] Each JSON string should be written to a single line in the corresponding file. The model has a ".to_json()" method to simplify conversion for you.
 
 Example:
