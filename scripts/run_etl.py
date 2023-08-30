@@ -5,6 +5,8 @@ from pydantic import BaseModel
 from datetime import datetime, timedelta
 from typing import Callable, Optional
 from pathlib import Path
+import pandas as pd
+import json
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -29,8 +31,10 @@ class CrimeDataRecord(BaseModel):
 
 class CrimeTypeMetrics(BaseModel):
     primary_type: str
-    arrest_count: int  # The count of all CrimeDataRecords for a primary_type where arrest == True.
-    non_arrest_count: int  # The count of all CrimeDataRecords for a primary_type where arrest == False.
+    # The count of all CrimeDataRecords for a primary_type where arrest == True.
+    arrest_count: int
+    # The count of all CrimeDataRecords for a primary_type where arrest == False.
+    non_arrest_count: int
 
 
 input_csv = Path("data/crime.csv")
@@ -38,37 +42,84 @@ outputs_dir = Path(".outputs")
 
 
 def parse() -> list[CrimeTypeMetrics]:
-    """YOUR CODE GOES IN THIS FUNCTION.
+    """Parse CSV and pull data"""
 
-    Assignment:
-        - Unzip the data from crime.csv.gz to "data/crime.csv" (this does not have to be done in Python).
-        - Update this parse() function to:
-            - Read the data from "data/crime.csv" and parse all the data rows into the CrimeDataRecord class above.
-            - Convert each CrimeDataRecord to JSON and output it to a corresponding text file in a directory called ".outputs".
-            Each JSON string should be written to a single line in the corresponding file. The model has a ".to_json()" method
-            to simplify conversion for you. Example:
-                - outputs/
-                    - PUBLIC PEACE VIOLATION.txt
-                    - DECEPTIVE PRACTICE.txt
-                    - CRIMINAL DAMAGE.txt
-                    - NARCOTICS.txt
-                    - etc...
-            - Return a list of CrimeTypeMetric values, sorted from most frequently occurring to least.
-                Occurrences should be calculated based on the number of CrimeTypeData records corresponding to the primary_type.
+    FAST_SAVE = False
 
-    Success Criteria:
-        - Running this python module executes the parsing logic and test logic successfully without any errors.
+    # create outputs_dir if it does not exist
+    outputs_dir.mkdir(parents=True, exist_ok=True)
 
-    Additional Notes:
-        - You may use any third party libraries or tools to execute this task but the entrypoint to the ETL process
-        must be executed by Python. You should be able to explain and justify your choices during review.
-        - First focus on getting the right solution and then focus on optimizations, like reducing the number of times the
-        file is read or the number of times the row items are iterated over or the number of records kept in memory.
-        Even if you choose not to make those optimizations, it'll still be good to have a discussion about what could have
-        been done.
-    """
+    # read data from csv and store as dataframe for future use
+    data_frame = pd.read_csv(input_csv,
+                             # dtype=dtypes,
+                             engine="pyarrow")
 
-    return []
+    # if we don't care about using the CrimeDataRecord model, we can save a lot of time
+    if not FAST_SAVE:
+        # convert the 'date' column to Python datetime objects
+        # for use later when pushing them to the CrimeDataRecord model
+        data_frame['date'] = pd.to_datetime(data_frame['date'])
+
+    # group data by primary_type
+    grouped_data = data_frame.groupby('primary_type')
+
+    # group sizes
+    group_sizes = grouped_data.size()
+
+    # sort data by data frame size and primary_type alphabetically
+    sorted_groups = group_sizes.reset_index(name='size').sort_values(
+        by=['size', 'primary_type'], ascending=[False, True])
+
+    # output list for validating tests
+    output_list = []
+
+    # sort grouped data by data frame size and iterate over each group to generate output list
+    for primary_type in sorted_groups['primary_type']:
+        # grab group
+        group = grouped_data.get_group(primary_type)
+
+        # grab results
+        arrests = group['arrest'].value_counts()
+        arrest_count = arrests.get(True, 0)
+        non_arrest_count = arrests.get(False, 0)
+
+        # format output list data for passing test case
+        sub_list = CrimeTypeMetrics(primary_type=primary_type,
+                                    arrest_count=arrest_count,
+                                    non_arrest_count=non_arrest_count)
+
+        # append CrimeTypeMetric object to output_list
+        output_list.append(sub_list)
+
+        if FAST_SAVE:
+            # plain old pandas to_json is way faster when we ignore the pydantic type
+            # 30 seconds faster
+            group.to_json(f'{outputs_dir}/{primary_type}.json',
+                          orient='records')
+
+        else:
+            # convert group_data to a list of dictionaries for CrimeDataRecord model
+            group_dicts = group.to_dict(orient='records')
+
+            # convert each dict to a CrimeDataRecord
+            crime_data_records = [CrimeDataRecord(
+                **cdr) for cdr in group_dicts]
+
+            # convert the crime_data_records to JSON
+            crime_data_record_json = [cdr.to_json()
+                                      for cdr in crime_data_records]
+
+            # save to the output file
+            with open(f'{outputs_dir}/{primary_type}.json', 'w', encoding="utf-8") as json_file:
+                json.dump(crime_data_record_json, json_file, indent=4)
+
+    logger.info(
+        """NOTE: To parse data faster,
+        set the variable FAST_SAVE on line 49 to True to save ~30 seconds"""
+        if not FAST_SAVE
+        else "Pretty fast, right?"
+    )
+    return output_list
 
 
 def check_criteria(test: Callable, name: str):
