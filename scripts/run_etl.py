@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from datetime import datetime, timedelta
 from typing import Callable, Optional
 from pathlib import Path
+import pandas as pd
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -29,8 +30,10 @@ class CrimeDataRecord(BaseModel):
 
 class CrimeTypeMetrics(BaseModel):
     primary_type: str
-    arrest_count: int  # The count of all CrimeDataRecords for a primary_type where arrest == True.
-    non_arrest_count: int  # The count of all CrimeDataRecords for a primary_type where arrest == False.
+    # The count of all CrimeDataRecords for a primary_type where arrest == True.
+    arrest_count: int
+    # The count of all CrimeDataRecords for a primary_type where arrest == False.
+    non_arrest_count: int
 
 
 input_csv = Path("data/crime.csv")
@@ -67,6 +70,10 @@ def parse() -> list[CrimeTypeMetrics]:
         Even if you choose not to make those optimizations, it'll still be good to have a discussion about what could have
         been done.
     """
+
+    data_frame = pd.read_csv(input_csv, engine="pyarrow")
+
+    print(data_frame)
 
     return []
 

@@ -2,7 +2,7 @@
 
 - [x] Unzip the data from crime.csv.gz to "data/crime.csv" (this does not have to be done in Python).
 - [ ] Update this parse() function to:
-  - [ ] Read the data from "data/crime.csv" and parse all the data rows into the CrimeDataRecord class above.
+  - [x] Read the data from "data/crime.csv" and parse all the data rows into the CrimeDataRecord class above.
   - [ ] Convert each CrimeDataRecord to JSON and output it to a corresponding text file in a directory called ".outputs".
   - [ ] Each JSON string should be written to a single line in the corresponding file. The model has a ".to_json()" method to simplify conversion for you.
 
@@ -31,13 +31,14 @@ Example:
 
 ## todos:
 
-- [ ] install linter
-- [ ] install formatter
+- [x] install linter
+- [x] install formatter
 - [ ] pull github macros in from dev machine
-- [ ] get docker to work on personal laptop
-- [ ] not sure what i would need a package for, this is simple enough - perhaps packages exist that would out-perform my existing ETL system from conversant...? need to research python etl packages i suppose
-- [ ] parse .csv as a python dictionary for a single task costing O(n) - could this runtime be reduced? probably not, even with multithreading we still have to read in each line individually
-- [ ] test runtimes with python timer for optimization step
+- [x] get docker to work on personal laptop
+- [x] not sure what i would need a package for, this is simple enough - perhaps packages exist that would out-perform my existing ETL system from conversant...? need to research python etl packages i suppose
+- [x] pick a csv parse package - resource: https://pythonspeed.com/articles/pandas-read-csv-fast/
+- [x] parse .csv as a python dictionary for a single task costing O(n) - could this runtime be reduced? probably not, even with multithreading we still have to read in each line individually
+- [x] test runtimes with python timer for optimization step - 2.5 seconds, barely
 - [ ] save all progress in github for review
 - [ ] create branches to show different options when possible, such as graphql option, etc
 - [ ] research flask ORM to avoid writing raw SQL for Postgres
@@ -59,4 +60,5 @@ Example:
 
 ## advanced optimizations:
 
+- use parquet instead of CSV https://pypi.org/project/fastparquet/
 - GraphQL instead of REST
