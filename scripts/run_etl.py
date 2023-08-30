@@ -44,7 +44,7 @@ def parse() -> list[CrimeTypeMetrics]:
     """YOUR CODE GOES IN THIS FUNCTION.
 
     Assignment:
-        - Unzip the data from crime.csv.gz to "data/crime.csv" (this does not have to be done in Python).
+        - Unzip the data from crime.csv.gz to "data/crime.csv".
         - Update this parse() function to:
             - Read the data from "data/crime.csv" and parse all the data rows into the CrimeDataRecord class above.
             - Convert each CrimeDataRecord to JSON and output it to a corresponding text file in a directory called ".outputs".
@@ -71,9 +71,43 @@ def parse() -> list[CrimeTypeMetrics]:
         been done.
     """
 
-    data_frame = pd.read_csv(input_csv, engine="pyarrow")
+    # TODO: could we use dtypes? or overkill?
+    # dtypes = {
+    #     'unique_key': "category",
+    #     'case_number': "category",
+    #     'date': "category",
+    #     'block': "category",
+    #     'iucr': "category",
+    #     'primary_type': "category",
+    #     'description': "category",
+    #     'location_description': "category",
+    #     'arrest': "category",
+    #     'domestic': "category",
+    #     'beat': "category",
+    #     'district': "category",
+    #     'ward': "category",
+    #     'community_area': "category",
+    #     'fbi_code': "category",
+    #     'x_coordinate': "category",
+    #     'y_coordinate': "category",
+    #     'year': "category",
+    #     'updated_on': "category",
+    #     'latitude': "category",
+    #     'longitude': "category",
+    #     'location': "category"
+    # }
 
-    print(data_frame)
+    data_frame = pd.read_csv(input_csv,
+                             # dtype=dtypes,
+                             engine="pyarrow")
+
+    for idx, group in data_frame.groupby('primary_type'):
+        print('idx', idx)
+        # print('group name', group.loc[0, 'primary_type'])
+        # print('len', len(group.index))
+        # orient: split, records, index, values, table, columns
+        # primary_type = group.loc[0, 'primary_type']
+        group.to_json(f'outputs/{idx}.json', orient='index')
 
     return []
 

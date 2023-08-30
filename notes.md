@@ -39,6 +39,7 @@ Example:
 - [x] pick a csv parse package - resource: https://pythonspeed.com/articles/pandas-read-csv-fast/
 - [x] parse .csv as a python dictionary for a single task costing O(n) - could this runtime be reduced? probably not, even with multithreading we still have to read in each line individually
 - [x] test runtimes with python timer for optimization step - 2.5 seconds, barely
+- [ ] parse dataframe from pandas efficiently - resource: https://towardsdatascience.com/efficiently-iterating-over-rows-in-a-pandas-dataframe-7dd5f9992c01
 - [ ] save all progress in github for review
 - [ ] create branches to show different options when possible, such as graphql option, etc
 - [ ] research flask ORM to avoid writing raw SQL for Postgres
