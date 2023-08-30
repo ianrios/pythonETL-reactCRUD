@@ -6,8 +6,6 @@ from datetime import datetime, timedelta
 from typing import Callable, Optional
 from pathlib import Path
 import pandas as pd
-import os
-import os.path
 import json
 
 logger = logging.getLogger(__name__)
