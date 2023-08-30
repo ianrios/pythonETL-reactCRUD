@@ -23,9 +23,9 @@ unzip this file locally.
 gunzip -c data/crime.csv.gz > data/crime.csv
 ```
 
-**Next**, if you do not have a Python development environment readily available, we have provided the docker 
+**Next**, if you do not have a Python development environment readily available, we have provided the docker
 compose file and configuration files to support remote container development in Visual Studio Code. For more details,
-check out the [documentation](https://code.visualstudio.com/docs/remote/containers#_getting-started). Once you have 
+check out the [documentation](https://code.visualstudio.com/docs/remote/containers#_getting-started). Once you have
 installed the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 extension, you can run the `Remote-Containers: Open Folder in Container` command in VSCode and target the root of this
 repository to launch into a remote container session in the Python docker container we have provided for you.
@@ -33,10 +33,9 @@ repository to launch into a remote container session in the Python docker contai
 Alternatively, you can go ahead and do all the Python development work in a development environment on your host machine,
 if you are set up to do so.
 
-
 # Assignment 1 - ETL in Python
 
-This assignment will review your basic proficiency in Python by having you perform an ETL operation on a 
+This assignment will review your basic proficiency in Python by having you perform an ETL operation on a
 fixed CSV dataset. The ETL process should be run with the following command:
 
 ```bash
@@ -44,33 +43,33 @@ $ python -m scripts.run_etl
 ```
 
 Success criteria:
+
 - Running the python script should successfully execute the parsing logic and export the data
-    from the CSV into the requested format.
+  from the CSV into the requested format.
 - All the test assertions pass on the resulting dataset.
 
-
 Be prepared to:
+
 - Walk us through the details of your solution and point out any specific optimizations made.
 - Discuss any further optimizations that could be made, given more time and thought.
 
 View the assignment details [here](./scripts/run_etl.py).
 
-
 # Assignment 2 - ETL to SQL Database
 
 This assignment gives you an opportunity to demonstrate your proficiency with data modeling and database scripting.
 
-**First**, using the same dataset as [Assignment 1](#assignment-1---etl-in-python), design a database schema to best 
-represent the data in the [CSV file](./data/crime.csv) in order to support queries to answer the following questions. 
+**First**, using the same dataset as [Assignment 1](#assignment-1---etl-in-python), design a database schema to best
+represent the data in the [CSV file](./data/crime.csv) in order to support queries to answer the following questions.
 Assume that we will want to build a reporting application that will run queries for these answers on a frequent basis:
 
 - What is the list of all the types of committed crimes (primary_type) in the dataset?
 - For any given year, what type of crime (primary_type) was the most frequently committed?
 - What percentage of each type of crime (primary_type) ended in arrest (arrest == true)?
 - What is the frequency of each crime type (primary_type) year over year? Imagine we want to generate datapoints
-    to graph the number of occurrences of each crime type over every year in the dataset.
+  to graph the number of occurrences of each crime type over every year in the dataset.
 - For any beat, district, ward or community (only one will be provided at a time), retrieve all the unique keys
-    of each crime incident ordered by date.
+  of each crime incident ordered by date.
 
 **Next**, using any preferred tools, script the creation of the proposed data schema and the import of the data into a
 Postgres database. For convenience, we have provided a docker-compose file for a simple Postgres database that can
@@ -88,18 +87,18 @@ the data using any database frameworks and tools you are familiar with.
 
 **Finally**, construct some sample queries that you would use to answer some of the questions listed above. Just tackle the
 ones you feel comfortable on and feel free to adjust the data model as you work through the problem. Consider how you would go
-about optimizing those queries to be run on a continuous basis by several users on a daily basis. Consider what database 
-constructs and features you would use to reduce stress on the SQL server and improve query responsiveness, given the nature 
+about optimizing those queries to be run on a continuous basis by several users on a daily basis. Consider what database
+constructs and features you would use to reduce stress on the SQL server and improve query responsiveness, given the nature
 of the dataset. These sample queries do not have to be exhaustive and are meant to drive the in-person conversation during
 the review session.
 
-
 # Assignment 3 - Working with APIs
 
- This assignment is intended to test your ability to implement features in the Flask web framework while integrating
- with a Postgres database.
+This assignment is intended to test your ability to implement features in the Flask web framework while integrating
+with a Postgres database.
 
 **First**, start the docker container with the provided Postgres database.
+
 ```sh
 $ docker-compose up db
 ```
@@ -134,6 +133,7 @@ db = os.environ["POSTGRES_DB"]
 ```
 
 Success criteria:
+
 - Records from the `covid_state_stats` table are served via the new endpoint.
 - Records are served in json format.
 - Datetime fields are in the ISO 8601 format.
@@ -159,5 +159,6 @@ This page does not have to be aesthetically pleasing, but it should have good us
 to use any third party tools or libraries to help complete the assignment.
 
 Success criteria
+
 - The covid data table is paginated. Users may navigate to the `next` or `previous` pages.
 - The user can set "number of rows to display" to 25, 50, or 100
