@@ -8,6 +8,7 @@ from pathlib import Path
 import pandas as pd
 import os
 import os.path
+import json
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -45,6 +46,8 @@ outputs_dir = Path(".outputs")
 def parse() -> list[CrimeTypeMetrics]:
     """Parse CSV and pull data"""
 
+    FAST_SAVE = False
+
     # create outputs_dir if it does not exist
     outputs_dir.mkdir(parents=True, exist_ok=True)
 
@@ -52,6 +55,12 @@ def parse() -> list[CrimeTypeMetrics]:
     data_frame = pd.read_csv(input_csv,
                              # dtype=dtypes,
                              engine="pyarrow")
+
+    # if we don't care about using the CrimeDataRecord model, we can save a lot of time
+    if not FAST_SAVE:
+        # convert the 'date' column to Python datetime objects
+        # for use later when pushing them to the CrimeDataRecord model
+        data_frame['date'] = pd.to_datetime(data_frame['date'])
 
     # group data by primary_type
     grouped_data = data_frame.groupby('primary_type')
@@ -84,10 +93,34 @@ def parse() -> list[CrimeTypeMetrics]:
         # append CrimeTypeMetric object to output_list
         output_list.append(sub_list)
 
-        # save data in json files
-        group.to_json(f'{outputs_dir}/{primary_type}.json',
-                      orient='records', lines=True)
+        if FAST_SAVE:
+            # plain old pandas to_json is way faster when we ignore the pydantic type
+            # 30 seconds faster
+            group.to_json(f'{outputs_dir}/{primary_type}.json',
+                          orient='records')
 
+        else:
+            # convert group_data to a list of dictionaries for CrimeDataRecord model
+            group_dicts = group.to_dict(orient='records')
+
+            # convert each dict to a CrimeDataRecord
+            crime_data_records = [CrimeDataRecord(
+                **cdr) for cdr in group_dicts]
+
+            # convert the crime_data_records to JSON
+            crime_data_record_json = [cdr.to_json()
+                                      for cdr in crime_data_records]
+
+            # save to the output file
+            with open(f'{outputs_dir}/{primary_type}.json', 'w', encoding="utf-8") as json_file:
+                json.dump(crime_data_record_json, json_file, indent=4)
+
+    logger.info(
+        """NOTE: To parse data faster,
+        set the variable FAST_SAVE on line 49 to True to save ~30 seconds"""
+        if not FAST_SAVE
+        else "Pretty fast, right?"
+    )
     return output_list
 
 
@@ -142,7 +175,6 @@ def test_crime_type_ordering(crime_metrics: list[CrimeTypeMetrics]):
         ["RITUALISM", 0, 5],
         ["NON-CRIMINAL (SUBJECT SPECIFIED)", 1, 1],
     ]
-    print(expected_ordered_crime_metrics)
     assert len(crime_metrics) == len(
         expected_ordered_crime_metrics
     ), "The list of metrics do not match the expected count."
