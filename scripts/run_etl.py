@@ -6,6 +6,8 @@ from datetime import datetime, timedelta
 from typing import Callable, Optional
 from pathlib import Path
 import pandas as pd
+import os
+import os.path
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -38,6 +40,7 @@ class CrimeTypeMetrics(BaseModel):
 
 input_csv = Path("data/crime.csv")
 outputs_dir = Path(".outputs")
+outputs_dir.mkdir(parents=True, exist_ok=True)
 
 
 def parse() -> list[CrimeTypeMetrics]:
@@ -96,6 +99,7 @@ def parse() -> list[CrimeTypeMetrics]:
     #     'longitude': "category",
     #     'location': "category"
     # }
+    print(outputs_dir)
 
     data_frame = pd.read_csv(input_csv,
                              # dtype=dtypes,
@@ -107,7 +111,7 @@ def parse() -> list[CrimeTypeMetrics]:
         # print('len', len(group.index))
         # orient: split, records, index, values, table, columns
         # primary_type = group.loc[0, 'primary_type']
-        group.to_json(f'outputs/{idx}.json', orient='index')
+        group.to_json(f'{outputs_dir}/{idx}.json', orient='index')
 
     return []
 

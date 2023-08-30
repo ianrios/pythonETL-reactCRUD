@@ -23,7 +23,7 @@ Example:
 #### Success Criteria:
 
 - [ ] Running this python module executes the parsing logic and test logic successfully without any errors.
-- [ ] run via `python -m scripts.run_etl`
+- [x] run via `python -m scripts.run_etl`
 
 #### Additional Notes:
 
