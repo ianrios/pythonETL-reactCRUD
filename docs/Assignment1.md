@@ -1,4 +1,4 @@
-### Assignment 1:
+### Assignment 1: ETL:
 
 - [x] Unzip the data from crime.csv.gz to "data/crime.csv" (this does not have to be done in Python).
 - [x] Update this parse() function to:

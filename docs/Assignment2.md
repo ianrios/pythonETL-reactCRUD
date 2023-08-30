@@ -1,0 +1,43 @@
+### Assignment 2: data modeling and db scripting:
+
+Must answer the following questions:
+- [ ] What is the list of all the types of committed crimes (primary_type) in the dataset?
+  - [ ] select all primary types by name, no need to order by
+  - [ ] can be grouped and ordered by later for additional queries
+- [ ] For any given year, what type of crime (primary_type) was the most frequently committed?
+  - [ ] group by year, sort by amount per primary type
+  - [ ] allow hard coding of specific year to just get that years group
+- [ ] What percentage of each type of crime (primary_type) ended in arrest (arrest == true)?
+  - [ ] divide by total amount
+  - [ ] use the same per year alongside the full db grouping
+- [ ] What is the frequency of each crime type (primary_type) year over year? Imagine we want to generate datapoints to graph the number of occurrences of each crime type over every year in the dataset.
+  - [ ] select data that would show trend
+- [ ] For any beat, district, ward or community (only one will be provided at a time), retrieve all the unique keys of each crime incident ordered by date.
+  - [ ] select where __ = input str, order by, unique
+
+
+**Next**, using any preferred tools, 
+
+- [ ] script the creation of the proposed data schema
+- [ ] import of the data into a Postgres database. 
+- [ ] start docker via `docker compose up db`
+- [x] The credentials can be found in the `.env` file at the root of this project.
+- [ ] confirm database available at: `jdbc:postgresql://localhost:5432/interview_db`.
+
+**Finally**, 
+- [ ] construct some sample queries that you would use to answer some of the questions listed above. 
+- [ ] Consider how you would go about optimizing those queries to be run on a continuous basis by several users on a daily basis. 
+- [ ] Consider what database constructs and features you would use to reduce stress on the SQL server and improve query responsiveness, given the nature of the dataset. These sample queries do not have to be exhaustive and are meant to drive the in-person conversation during the review session.
+
+## Tasks
+
+- [ ] design database schema for exisitng ETL dataset with db diagram
+- [ ] come up with queries, indexes, and enums (if applicable)
+- [ ] see if pandas has an easy to use csv to sql we could use
+- [ ] create new script for pushing data into sql
+- [ ] create example sql file with different queries tested and described
+
+
+## Optimizations to try
+
+- [ ] opt 1
