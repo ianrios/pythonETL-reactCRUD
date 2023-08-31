@@ -21,3 +21,4 @@ def _register_blueprints(app: Flask) -> None:
     from api.endpoints import covid_stats
 
     app.register_blueprint(covid_stats.blueprint)
+

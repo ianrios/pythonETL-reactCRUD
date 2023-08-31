@@ -25,3 +25,11 @@ def test_db_connection():
         "stdout": result.stdout.decode(),
         "stderr": result.stderr.decode(),
     }
+
+
+
+@blueprint.route("/test-flask", methods=["GET"])
+def test_flask():
+    """Establish flask works"""
+
+    return "Flask App Running"

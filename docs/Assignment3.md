@@ -1,11 +1,9 @@
 # Assignment 3 - Working with APIs
 
 
-
-- [ ] start the docker container with the provided Postgres database. `docker-compose up db -d`
-- database will automatically be populated with a `interview_db.covid_state_stats` table - confirm this
-  - [ ] connect to the database to make sure the table is there and has data. 
-- [ ] install the project's dependencies, then run the flask application:
+- [x] start the docker container with the provided Postgres database. `docker-compose up db -d`
+- [ ] database will automatically be populated with a `interview_db.covid_state_stats` table - confirm this and connect to the database to make sure the table is there and has data. 
+- [x] install the project's dependencies, then run the flask application:
 ```sh
 $ python -m api
 
@@ -16,7 +14,7 @@ $ curl http://localhost:5001/covid-stats/test-db-connection
 $ curl http://localhost:5001/covid-stats/test-db-connection?host=host.docker.internal
 ```
 
-- [ ] create a new api endpoint to serve records from the `covid_state_stats` table.
+- [x] create a new api endpoint to serve records from the `covid_state_stats` table.
 
 The database credentials can be found by looking up the environment variables that were injected into flask from `.env`.
 
@@ -40,9 +38,14 @@ Success criteria:
 
 ## Tasks
 
-- [ ] what is flask
+- [x] what is flask
+- [ ] get pgadmin or other db viewing tool to work
 - [ ] does flask have an orm?
 - [ ] does flask have a cli to build boilerplate?
+- [ ] get dockerfile to work correctly
+- [ ] connect to db via the covid stats endpoint
+- [ ] get connection to use correct 5001 port, instead of default 5000 port
+
 
 
 ## Optimizations to try
