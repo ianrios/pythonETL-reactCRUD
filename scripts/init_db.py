@@ -91,9 +91,28 @@ def migrate_db(cursor, connection):
                 """)
     # TODO: location could be point, but not enough time
 
-    # create an index on the primary_type_id column
+    # create indexes for speed optimizations later
     cursor.execute(
         f"CREATE INDEX idx_{CRIMES_TABLE_NAME}_primary_type_id ON {CRIMES_TABLE_NAME} (primary_type_id)")
+    cursor.execute(
+        f"CREATE INDEX idx_{CRIMES_TABLE_NAME}_beat ON {CRIMES_TABLE_NAME} (beat)")
+    cursor.execute(
+        f"CREATE INDEX idx_{CRIMES_TABLE_NAME}_district ON {CRIMES_TABLE_NAME} (district)")
+    cursor.execute(
+        f"CREATE INDEX idx_{CRIMES_TABLE_NAME}_ward ON {CRIMES_TABLE_NAME} (ward)")
+    cursor.execute(
+        f"CREATE INDEX idx_{CRIMES_TABLE_NAME}_community_area ON {CRIMES_TABLE_NAME} (community_area)")
+    cursor.execute(
+        f"CREATE INDEX idx_{CRIMES_TABLE_NAME}_fbi_code ON {CRIMES_TABLE_NAME} (fbi_code)")
+    cursor.execute(
+        f"CREATE INDEX idx_{CRIMES_TABLE_NAME}_year ON {CRIMES_TABLE_NAME} (year)")
+    cursor.execute(
+        f"CREATE INDEX idx_{CRIMES_TABLE_NAME}_arrest ON {CRIMES_TABLE_NAME} (arrest)")
+    cursor.execute(
+        f"CREATE INDEX idx_{CRIMES_TABLE_NAME}_block ON {CRIMES_TABLE_NAME} (block)")
+    cursor.execute(
+        f"CREATE INDEX idx_{CRIMES_TABLE_NAME}_iucr ON {CRIMES_TABLE_NAME} (iucr)")
+    # this might be overkill but could be useful
 
     connection.commit()
 
