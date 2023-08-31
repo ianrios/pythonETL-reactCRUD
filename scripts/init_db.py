@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 import pandas as pd
 import psycopg2
+import psycopg2.extras
 
 
 logger = logging.getLogger(__name__)
@@ -36,40 +37,52 @@ def clear_table(cursor, connection, table_name, reset_sequence=False):
 
 
 def migrate_db(cursor, connection):
-    """create tables needed for fresh database"""
+    """drop tables and recreate tables (if needed) for fresh database"""
 
+    # drop tables if exists - new db version
+    # TODO: consider wrapping this in a migrate new version method
+    cursor.execute(f"DROP TABLE IF EXISTS {CRIMES_TABLE_NAME}")
+    cursor.execute(f"DROP TABLE IF EXISTS {PRIMARY_TYPES_TABLE_NAME}")
+
+    # create new tables
     cursor.execute(f"""
                    CREATE TABLE IF NOT EXISTS {PRIMARY_TYPES_TABLE_NAME} (
-                    id serial PRIMARY KEY,
-                    primary_type text
+                    id serial PRIMARY KEY NOT NULL,
+                    primary_type text NOT NULL
                    );
-                   """)
+                """)
 
     cursor.execute(f"""
-                   CREATE TABLE IF NOT EXISTS {CRIMES_TABLE_NAME} (
-                    unique_key int,
+                    CREATE TABLE IF NOT EXISTS {CRIMES_TABLE_NAME} (
+                    unique_key bigint NOT NULL,
                     case_number text,
-                    date date,
+                    date timestamp with time zone,
                     block text,
-                    iucr int,
-                    primary_type text,
+                    iucr text,
+                    primary_type_id int REFERENCES primary_types(id),
                     description text,
                     location_description text,
                     arrest boolean,
                     domestic boolean,
-                    beat_id int,
-                    district_id int,
-                    ward_id int,
-                    community_area_id int,
-                    fbi_code_id int,
+                    beat int,
+                    district text,
+                    ward text,
+                    community_area text,
+                    fbi_code text,
                     x_coordinate numeric,
                     y_coordinate numeric,
                     year integer,
-                    updated_on timestamp,
+                    updated_on timestamp with time zone,
                     latitude numeric,
                     longitude numeric,
-                    location point
-                    );""")
+                    location text
+                   );
+                """)
+    # TODO: location could be point, but not enough time
+
+    # create an index on the primary_type_id column
+    cursor.execute(
+        f"CREATE INDEX idx_{CRIMES_TABLE_NAME}_primary_type_id ON {CRIMES_TABLE_NAME} (primary_type_id)")
 
     connection.commit()
 
@@ -96,19 +109,28 @@ def seed_db(cursor, connection):
 
     # insert grouped data into crime table
     for primary_type, group in grouped_data:
-        # convert data frame to list of tuples for insertion
-        values = [tuple(row) for row in group.values]
+        # convert data frame to dict insertion
+        rows = group.to_dict('records')
 
         # get primary_type_id
         primary_type_id = primary_type_mapping[primary_type]
 
-        # Modify the values to include primary_type_id instead of primary_type
-        values = [(primary_type_id,) + row[1:] for row in values]
+        # transform rows to include primary_type_id and exclude primary_type
+        for row in rows:
+            row['primary_type_id'] = primary_type_id
+            row.pop('primary_type')
 
-        # Insert the modified values into the crime table
+        # columns for insert
+        columns = [col for col in data_frame.columns if col != 'primary_type']
+        columns.insert(0, 'primary_type_id')
+
+        # convert to tuples for insertion
+        tuples = [tuple(row[col] for col in columns) for row in rows]
+
+        # insert
         psycopg2.extras.execute_values(
-            cursor, f"INSERT INTO {CRIMES_TABLE_NAME} VALUES %s",
-            values, template=None, page_size=100
+            cursor, f"INSERT INTO {CRIMES_TABLE_NAME} ({', '.join(columns)}) VALUES %s",
+            tuples, template=None, page_size=100
         )
 
         connection.commit()

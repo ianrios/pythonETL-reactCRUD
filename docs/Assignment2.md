@@ -18,9 +18,9 @@ Must answer the following questions:
 
 **Next**, using any preferred tools, 
 
-- [ ] script the creation of the proposed data schema
+- [x] script the creation of the proposed data schema
 - [ ] import of the data into a Postgres database. 
-- [ ] start docker via `docker compose up db`
+- [x] start docker via `docker compose up db`
 - [x] The credentials can be found in the `.env` file at the root of this project.
 - [ ] confirm database available at: `jdbc:postgresql://localhost:5432/interview_db`.
 
