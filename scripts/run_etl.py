@@ -49,7 +49,7 @@ def parse() -> list[CrimeTypeMetrics]:
     # create outputs_dir if it does not exist
     outputs_dir.mkdir(parents=True, exist_ok=True)
 
-    # read data from csv and store as dataframe for future use
+    # read data from csv and store as data frame for future use
     data_frame = pd.read_csv(input_csv, engine="pyarrow")
 
     # if we don't care about using the CrimeDataRecord model, we can save a lot of time

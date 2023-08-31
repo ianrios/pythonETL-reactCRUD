@@ -53,7 +53,7 @@ I believe the correct sub sort is alphabetical.
 - [x] pick a csv parse package - resource: https://pythonspeed.com/articles/pandas-read-csv-fast/
 - [x] parse .csv as a python dictionary for a single task costing O(n) - could this runtime be reduced? probably not, even with multithreading we still have to read in each line individually
 - [x] test runtimes with python timer for optimization step - 2.5 seconds, barely
-- [x] parse dataframe from pandas efficiently - resource: https://towardsdatascience.com/efficiently-iterating-over-rows-in-a-pandas-dataframe-7dd5f9992c01
+- [x] parse data frame from pandas efficiently - resource: https://towardsdatascience.com/efficiently-iterating-over-rows-in-a-pandas-dataframe-7dd5f9992c01
 - [x] save all progress in github for review
 
 

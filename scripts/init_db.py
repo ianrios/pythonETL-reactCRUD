@@ -14,7 +14,8 @@ logger.setLevel("INFO")
 input_csv = Path("data/crime.csv")
 
 
-TABLE_NAME = 'crime'
+CRIMES_TABLE_NAME = 'crimes'
+PRIMARY_TYPES_TABLE_NAME = 'primary_types'
 
 
 def connect(params):
@@ -23,10 +24,29 @@ def connect(params):
     return [connection.cursor(), connection]
 
 
+def clear_table(cursor, connection, table_name, reset_sequence=False):
+    """delete all rows from a table"""
+    cursor.execute(f"DELETE FROM {table_name}")
+
+    # for primary_types table
+    if reset_sequence:
+        cursor.execute(f"ALTER SEQUENCE {table_name}_id_seq RESTART WITH 1")
+
+    connection.commit()
+
+
 def migrate_db(cursor, connection):
     """create tables needed for fresh database"""
+
     cursor.execute(f"""
-                   CREATE TABLE IF NOT EXISTS {TABLE_NAME} (
+                   CREATE TABLE IF NOT EXISTS {PRIMARY_TYPES_TABLE_NAME} (
+                    id serial PRIMARY KEY,
+                    primary_type text
+                   );
+                   """)
+
+    cursor.execute(f"""
+                   CREATE TABLE IF NOT EXISTS {CRIMES_TABLE_NAME} (
                     unique_key int,
                     case_number text,
                     date date,
@@ -57,31 +77,39 @@ def migrate_db(cursor, connection):
 def seed_db(cursor, connection):
     """Parse CSV and inject data into SQL DB"""
 
-    # read data from csv and store as dataframe for future use
+    # read data from csv and store as data frame for future use
     data_frame = pd.read_csv(input_csv, engine="pyarrow")
+
+    # insert primary types into db and save foreign keys in dict for future use
+    primary_type_mapping = {}
+    for primary_type in data_frame['primary_type'].unique():
+        cursor.execute(
+            f"""INSERT INTO {PRIMARY_TYPES_TABLE_NAME} (primary_type)
+            VALUES (%s) RETURNING id""", (primary_type,)
+        )
+        primary_type_id = cursor.fetchone()[0]
+        primary_type_mapping[primary_type] = primary_type_id
+    connection.commit()
 
     # group data by primary_type
     grouped_data = data_frame.groupby('primary_type')
 
-    # group sizes
-    group_sizes = grouped_data.size()
-
-    # sort data by data frame size and primary_type alphabetically
-    sorted_groups = group_sizes.reset_index(name='size').sort_values(
-        by=['size', 'primary_type'], ascending=[False, True])
-
-    # sort grouped data by data frame size and iterate over each group to generate output list
-    for primary_type in sorted_groups['primary_type']:
-        # grab group
-        group = grouped_data.get_group(primary_type)
-
-        # find foreign key for primary_type or create
-
-        # convert DataFrame to list of tuples for insertion
+    # insert grouped data into crime table
+    for primary_type, group in grouped_data:
+        # convert data frame to list of tuples for insertion
         values = [tuple(row) for row in group.values]
-        # insert
+
+        # get primary_type_id
+        primary_type_id = primary_type_mapping[primary_type]
+
+        # Modify the values to include primary_type_id instead of primary_type
+        values = [(primary_type_id,) + row[1:] for row in values]
+
+        # Insert the modified values into the crime table
         psycopg2.extras.execute_values(
-            cursor, f"INSERT INTO {TABLE_NAME} VALUES %s", values, template=None, page_size=100)
+            cursor, f"INSERT INTO {CRIMES_TABLE_NAME} VALUES %s",
+            values, template=None, page_size=100
+        )
 
         connection.commit()
 
@@ -104,8 +132,12 @@ if __name__ == "__main__":
     # migrate db (create tables)
     migrate_db(cur, conn)
 
+    # clear tables if previously seeded
+    clear_table(cur, conn, CRIMES_TABLE_NAME)
+    clear_table(cur, conn, PRIMARY_TYPES_TABLE_NAME, reset_sequence=True)
+
     # migrate db (create tables)
-    # seed_db(cur, conn)
+    seed_db(cur, conn)
 
     # close connection and cursor
     cur.close()

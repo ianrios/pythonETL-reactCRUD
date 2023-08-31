@@ -31,10 +31,10 @@ Must answer the following questions:
 
 ## Tasks
 
-- [ ] design database schema for exisitng ETL dataset with db diagram
-- [ ] identify foreign keys for easy indexing later
-  - [ ] primary_type
-  - [ ] beat
+- [x] design database schema for exisitng ETL dataset with db diagram
+- [x] identify foreign keys for easy indexing later
+  - [x] primary_type
+  - [ ] beat - not sure if these are overkill?
   - [ ] district
   - [ ] ward
   - [ ] community
