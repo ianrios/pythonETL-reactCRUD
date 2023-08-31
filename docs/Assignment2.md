@@ -7,13 +7,11 @@ Must answer the following questions:
 - [x] For any given year, what type of crime (primary_type) was the most frequently committed?
   - [x] group by year, sort by amount per primary type
   - [x] allow hard coding of specific year to just get that years group
-- [ ] What percentage of each type of crime (primary_type) ended in arrest (arrest == true)?
-  - [ ] divide by total amount
-  - [ ] use the same per year alongside the full db grouping
-- [ ] What is the frequency of each crime type (primary_type) year over year? Imagine we want to generate datapoints to graph the number of occurrences of each crime type over every year in the dataset.
-  - [ ] select data that would show trend
-- [ ] For any beat, district, ward or community (only one will be provided at a time), retrieve all the unique keys of each crime incident ordered by date.
-  - [ ] select where __ = input str, order by, unique
+- [x] What percentage of each type of crime (primary_type) ended in arrest (arrest == true)?
+- [x] What is the frequency of each crime type (primary_type) year over year? Imagine we want to generate datapoints to graph the number of occurrences of each crime type over every year in the dataset.
+  - [x] select data that would show trend
+- [x] For any beat, district, ward or community (only one will be provided at a time), retrieve all the unique keys of each crime incident ordered by date.
+  - [x] select where __ = input str, order by, unique
 
 
 **Next**, using any preferred tools, 
@@ -37,7 +35,7 @@ Must answer the following questions:
 
 - [x] design database schema for exisitng ETL dataset with db diagram
   - https://dbdiagram.io/d/64efd9ff02bd1c4a5eb575f0
-- [x] identify keys for easy indexing later
+- [x] identify keys for easy indexing later (after implementing, I was able to speed up performace by 30 seconds ish)
   - [x] primary_type
   - [x] beat - not sure if these are overkill?
   - [x] district

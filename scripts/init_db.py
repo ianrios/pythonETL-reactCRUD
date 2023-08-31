@@ -203,7 +203,8 @@ def query_db(connection):
     logger.info('\nStarting Next Query\n')
 
     year = 2022
-    select_most_popular_crimes_in_year = f"""SELECT p.primary_type, COUNT(*) as count FROM {CRIMES_TABLE_NAME} c
+    select_most_popular_crimes_in_year = f"""SELECT p.primary_type, COUNT(*) as count
+        FROM {CRIMES_TABLE_NAME} c
         JOIN {PRIMARY_TYPES_TABLE_NAME} p ON c.primary_type_id = p.id
         WHERE year = {year}
         GROUP BY year, p.primary_type
@@ -231,6 +232,34 @@ def query_db(connection):
         'most frequently occuring crime and its total occurance per year')
     print(most_frequent_crime_per_year)
     logger.info('\nStarting Next Query\n')
+
+    select_percentage_arrest_true = f"""SELECT p.primary_type,
+        AVG(CASE WHEN c.arrest THEN 1 ELSE 0 END) * 100 AS arrest_percentage
+        FROM {CRIMES_TABLE_NAME} c
+        JOIN {PRIMARY_TYPES_TABLE_NAME} p ON c.primary_type_id = p.id
+        GROUP BY p.primary_type"""
+    percent_of_crimes_ending_in_arrest = sqlio.read_sql_query(
+        select_percentage_arrest_true, connection)
+    logger.info(
+        'percentage of crimes ending in arrests by crime type')
+    print(percent_of_crimes_ending_in_arrest)
+    logger.info('\nStarting Next Query\n')
+
+    location_type = 'beat'  # can be beat, district, ward, or community_area
+    location_match = '1712'  # must match what that category looks like
+
+    select_per_location = f"""SELECT unique_key, beat, district, ward, community_area
+        FROM {CRIMES_TABLE_NAME}
+        WHERE {location_type} = '{location_match}'
+        ORDER BY date;"""
+    unique_ids_per_location = sqlio.read_sql_query(
+        select_per_location, connection)
+    logger.info(
+        f'unique ids per location where "{location_type}" matches "{location_match}"')
+    print(unique_ids_per_location)
+    logger.info('\nStarting Next Query\n')
+
+    logger.info('\nFinished Queries\n')
 
 
 if __name__ == "__main__":
