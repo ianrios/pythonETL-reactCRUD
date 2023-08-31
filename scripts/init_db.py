@@ -1,6 +1,7 @@
 import logging
 import sys
 import os
+from dotenv import load_dotenv
 from pathlib import Path
 import pandas as pd
 import psycopg2
@@ -12,25 +13,17 @@ logger.setLevel("INFO")
 
 input_csv = Path("data/crime.csv")
 
-# PostgreSQL connection parameters
-db_params = {
-    'host': 'localhost',
-    'database': os.environ['POSTGRES_DB'],
-    'user': os.environ['POSTGRES_USER'],
-    'password': os.environ['POSTGRES_PASSWORD'],
-    'port': 5432
-}
 
 TABLE_NAME = 'crime'
 
 
-def connect():
-    """Establish and return a connection to the PostgreSQL database and the db cursor"""
-    connection = psycopg2.connect(**db_params)
+def connect(params):
+    """establish and return a connection to the PostgreSQL database and the db cursor"""
+    connection = psycopg2.connect(**params)
     return [connection.cursor(), connection]
 
 
-def create_tables(cursor, connection):
+def migrate_db(cursor, connection):
     """create tables needed for fresh database"""
     cursor.execute(f"""
                    CREATE TABLE IF NOT EXISTS {TABLE_NAME} (
@@ -39,7 +32,7 @@ def create_tables(cursor, connection):
                     date date,
                     block text,
                     iucr int,
-                    primary_type_id int,
+                    primary_type text,
                     description text,
                     location_description text,
                     arrest boolean,
@@ -51,7 +44,7 @@ def create_tables(cursor, connection):
                     fbi_code_id int,
                     x_coordinate numeric,
                     y_coordinate numeric,
-                    year number,
+                    year integer,
                     updated_on timestamp,
                     latitude numeric,
                     longitude numeric,
@@ -61,7 +54,7 @@ def create_tables(cursor, connection):
     connection.commit()
 
 
-def insert_data(cursor, connection):
+def seed_db(cursor, connection):
     """Parse CSV and inject data into SQL DB"""
 
     # read data from csv and store as dataframe for future use
@@ -94,8 +87,26 @@ def insert_data(cursor, connection):
 
 
 if __name__ == "__main__":
-    [cur, conn] = connect()
-    create_tables(cur, conn)
-    insert_data(cur, conn)
+
+    # load .env
+    load_dotenv()
+
+    # create postgres connection
+    db_params = {
+        'host': 'db',
+        'database': os.getenv('POSTGRES_DB'),
+        'user': os.getenv('POSTGRES_USER'),
+        'password': os.getenv('POSTGRES_PASSWORD'),
+        'port': 5432
+    }
+    [cur, conn] = connect(db_params)
+
+    # migrate db (create tables)
+    migrate_db(cur, conn)
+
+    # migrate db (create tables)
+    # seed_db(cur, conn)
+
+    # close connection and cursor
     cur.close()
     conn.close()
