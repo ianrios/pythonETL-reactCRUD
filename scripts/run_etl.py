@@ -50,9 +50,7 @@ def parse() -> list[CrimeTypeMetrics]:
     outputs_dir.mkdir(parents=True, exist_ok=True)
 
     # read data from csv and store as dataframe for future use
-    data_frame = pd.read_csv(input_csv,
-                             # dtype=dtypes,
-                             engine="pyarrow")
+    data_frame = pd.read_csv(input_csv, engine="pyarrow")
 
     # if we don't care about using the CrimeDataRecord model, we can save a lot of time
     if not FAST_SAVE:

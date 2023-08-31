@@ -32,12 +32,20 @@ Must answer the following questions:
 ## Tasks
 
 - [ ] design database schema for exisitng ETL dataset with db diagram
+- [ ] identify foreign keys for easy indexing later
+  - [ ] primary_type
+  - [ ] beat
+  - [ ] district
+  - [ ] ward
+  - [ ] community
 - [ ] come up with queries, indexes, and enums (if applicable)
 - [ ] see if pandas has an easy to use csv to sql we could use
 - [ ] create new script for pushing data into sql
-- [ ] create example sql file with different queries tested and described
+- [ ] come up with basic sql queries in an sql file
 
 
 ## Optimizations to try
 
-- [ ] opt 1
+- [ ] use python to perform sql instead of raw sql
+- [ ] create example python script with user inputs using invoke with all the different SQL queries tested and described
+- [ ] use an orm instead of python sql
