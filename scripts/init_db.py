@@ -1,11 +1,19 @@
 import logging
+import argparse
 import sys
+from time import perf_counter
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 from pathlib import Path
 import pandas as pd
 import psycopg2
 import psycopg2.extras
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('--init', action='store_true', help="Run Init Method")
+parser.add_argument('--query', action='store_true', help="Run Queries")
 
 
 logger = logging.getLogger(__name__)
@@ -136,7 +144,19 @@ def seed_db(cursor, connection):
         connection.commit()
 
 
+def query_db(cursor, connection):
+    # create many queries to check if data exists and was parsed and inserted correctly
+
+    return
+
+
 if __name__ == "__main__":
+
+    args = parser.parse_args()
+    print(args)
+
+    if not args.init and not args.query:
+        parser.print_help()
 
     # load .env
     load_dotenv()
@@ -151,15 +171,34 @@ if __name__ == "__main__":
     }
     [cur, conn] = connect(db_params)
 
-    # migrate db (create tables)
-    migrate_db(cur, conn)
+    if args.init:
+        logger.info("Initializing DB")
+        t1 = perf_counter()
 
-    # clear tables if previously seeded
-    clear_table(cur, conn, CRIMES_TABLE_NAME)
-    clear_table(cur, conn, PRIMARY_TYPES_TABLE_NAME, reset_sequence=True)
+        # migrate db (create tables)
+        migrate_db(cur, conn)
 
-    # migrate db (create tables)
-    seed_db(cur, conn)
+        # clear tables if previously seeded
+        clear_table(cur, conn, CRIMES_TABLE_NAME)
+        clear_table(cur, conn, PRIMARY_TYPES_TABLE_NAME, reset_sequence=True)
+
+        # migrate db (create tables)
+        seed_db(cur, conn)
+
+        t2 = perf_counter()
+        time_delta = timedelta(seconds=t2-t1)
+        logger.info(f"Completed database initialization in {time_delta}.")
+
+    if args.query:
+        logger.info("Running Queries")
+        t1 = perf_counter()
+
+        # query db
+        query_db(cur, conn)
+
+        t2 = perf_counter()
+        time_delta = timedelta(seconds=t2-t1)
+        logger.info(f"Completed queries in {time_delta}.")
 
     # close connection and cursor
     cur.close()
