@@ -10,6 +10,8 @@ import pandas as pd
 import pandas.io.sql as sqlio
 import psycopg2
 import psycopg2.extras
+import warnings
+
 
 parser = argparse.ArgumentParser()
 
@@ -58,7 +60,7 @@ def migrate_db(cursor, connection):
                    CREATE TABLE IF NOT EXISTS {PRIMARY_TYPES_TABLE_NAME} (
                     id serial PRIMARY KEY NOT NULL,
                     primary_type text NOT NULL
-                   );
+                   )
                 """)
 
     cursor.execute(f"""
@@ -85,7 +87,7 @@ def migrate_db(cursor, connection):
                     latitude numeric,
                     longitude numeric,
                     location text
-                   );
+                   )
                 """)
     # TODO: location could be point, but not enough time
 
@@ -145,22 +147,71 @@ def seed_db(cursor, connection):
         connection.commit()
 
 
-def query_db(cursor, connection):
+def query_db(connection):
+    """list of queries to test DB"""
+    warnings.simplefilter(action='ignore', category=UserWarning)
+
     # create many queries to check if data exists and was parsed and inserted correctly
 
+    logger.info('\nStarting First Query\n')
     select_primary_types = f"SELECT * FROM {PRIMARY_TYPES_TABLE_NAME}"
     primary_types = sqlio.read_sql_query(select_primary_types, connection)
+    logger.info('all primary types')
     print(primary_types)
+    logger.info('\nStarting Next Query\n')
 
     select_distinct_years = f"SELECT DISTINCT year FROM {CRIMES_TABLE_NAME}"
     distinct_years = sqlio.read_sql_query(select_distinct_years, connection)
+    logger.info('all distinct years')
     print(distinct_years)
+    logger.info('\nStarting Next Query\n')
 
     select_distinct_years = f"SELECT year, COUNT(year) AS total_crimes_in_year FROM {CRIMES_TABLE_NAME} GROUP BY year"
     distinct_years = sqlio.read_sql_query(select_distinct_years, connection)
+    logger.info('total crimes for each distinct year')
     print(distinct_years)
+    logger.info('\nStarting Next Query\n')
 
-    return
+    select_all_primary_type_counts_per_year = f"""SELECT year, p.primary_type, COUNT(*) AS count
+        FROM {CRIMES_TABLE_NAME} c
+        JOIN {PRIMARY_TYPES_TABLE_NAME} p ON c.primary_type_id = p.id
+        GROUP BY year, p.primary_type
+        ORDER BY year, count DESC"""
+    all_primary_type_counts_per_year = sqlio.read_sql_query(
+        select_all_primary_type_counts_per_year, connection)
+    logger.info('all distinct crimes and counts per year')
+    print(all_primary_type_counts_per_year)
+    logger.info('\nStarting Next Query\n')
+
+    year = 2022
+    select_most_popular_crimes_in_year = f"""SELECT p.primary_type, COUNT(*) as count FROM {CRIMES_TABLE_NAME} c
+        JOIN {PRIMARY_TYPES_TABLE_NAME} p ON c.primary_type_id = p.id
+        WHERE year = {year}
+        GROUP BY year, p.primary_type
+        ORDER BY count DESC"""
+    most_popular_crimes_in_year = sqlio.read_sql_query(
+        select_most_popular_crimes_in_year, connection)
+
+    logger.info(f'all distinct crimes and counts in {year}')
+    print(most_popular_crimes_in_year)
+    logger.info('\nStarting Next Query\n')
+
+    select_most_frequent_crime_per_year = f"""SELECT year, p.primary_type, COUNT(*) AS count
+        FROM {CRIMES_TABLE_NAME} c
+        JOIN {PRIMARY_TYPES_TABLE_NAME} p ON c.primary_type_id = p.id
+        GROUP BY year, p.primary_type
+        HAVING COUNT(*) = (SELECT MAX(sub.count)
+            FROM (SELECT year AS sub_year, primary_type_id, COUNT(*) AS count
+                FROM crimes
+                GROUP BY sub_year, primary_type_id) sub
+            WHERE sub_year = year)
+        ORDER BY year"""
+    most_frequent_crime_per_year = sqlio.read_sql_query(
+        select_most_frequent_crime_per_year, connection)
+    logger.info(
+        'most frequently occuring crime and its total occurance per year')
+    print(most_frequent_crime_per_year)
+    logger.info('\nStarting Next Query\n')
 
 
 if __name__ == "__main__":
@@ -207,7 +258,7 @@ if __name__ == "__main__":
         t1 = perf_counter()
 
         # query db
-        query_db(cur, conn)
+        query_db(conn)
 
         t2 = perf_counter()
         time_delta = timedelta(seconds=t2-t1)

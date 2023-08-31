@@ -4,7 +4,7 @@ Must answer the following questions:
 - [x] What is the list of all the types of committed crimes (primary_type) in the dataset?
   - [x] select all primary types by name, no need to order by
   - [ ] can be grouped and ordered by later for additional queries
-- [ ] For any given year, what type of crime (primary_type) was the most frequently committed?
+- [x] For any given year, what type of crime (primary_type) was the most frequently committed?
   - [ ] group by year, sort by amount per primary type
   - [ ] allow hard coding of specific year to just get that years group
 - [ ] What percentage of each type of crime (primary_type) ended in arrest (arrest == true)?
