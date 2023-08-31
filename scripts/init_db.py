@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from datetime import timedelta
 from pathlib import Path
 import pandas as pd
+import pandas.io.sql as sqlio
 import psycopg2
 import psycopg2.extras
 
@@ -146,6 +147,18 @@ def seed_db(cursor, connection):
 
 def query_db(cursor, connection):
     # create many queries to check if data exists and was parsed and inserted correctly
+
+    select_primary_types = f"SELECT * FROM {PRIMARY_TYPES_TABLE_NAME}"
+    primary_types = sqlio.read_sql_query(select_primary_types, connection)
+    print(primary_types)
+
+    select_distinct_years = f"SELECT DISTINCT year FROM {CRIMES_TABLE_NAME}"
+    distinct_years = sqlio.read_sql_query(select_distinct_years, connection)
+    print(distinct_years)
+
+    select_distinct_years = f"SELECT year, COUNT(year) AS total_crimes_in_year FROM {CRIMES_TABLE_NAME} GROUP BY year"
+    distinct_years = sqlio.read_sql_query(select_distinct_years, connection)
+    print(distinct_years)
 
     return
 

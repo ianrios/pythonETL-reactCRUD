@@ -1,8 +1,8 @@
 ### Assignment 2: data modeling and db scripting:
 
 Must answer the following questions:
-- [ ] What is the list of all the types of committed crimes (primary_type) in the dataset?
-  - [ ] select all primary types by name, no need to order by
+- [x] What is the list of all the types of committed crimes (primary_type) in the dataset?
+  - [x] select all primary types by name, no need to order by
   - [ ] can be grouped and ordered by later for additional queries
 - [ ] For any given year, what type of crime (primary_type) was the most frequently committed?
   - [ ] group by year, sort by amount per primary type
