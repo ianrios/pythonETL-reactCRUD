@@ -11,11 +11,11 @@ import Pagination from "./table/pagination";
 import { useAppContext } from "../context/app-context";
 
 const StatsTable = () => {
-  const { columns, rows } = useAppContext();
+  const { columns, currentPagedData } = useAppContext();
 
   return (
     <Box>
-      {columns.length && rows.length && (
+      {columns.length && currentPagedData.length ? (
         <Paper>
           <Toolbar />
           <TableContainer style={{ maxHeight: "calc(100vh - 180px)" }}>
@@ -26,7 +26,7 @@ const StatsTable = () => {
           </TableContainer>
           <Pagination />
         </Paper>
-      )}
+      ) : null}
     </Box>
   );
 };
