@@ -214,7 +214,7 @@ const VirtualTable = () => {
 
 
     return (
-        <Paper style={{ height: 400, width: '100%' }}>
+        <Paper style={{ height: 'calc(100vh - 60px)', width: '100%' }}>
             <TableVirtuoso
                 data={rows}
                 components={VirtuosoTableComponents}
