@@ -1,5 +1,15 @@
 version: "3.9"
 services:
+  development:
+    image: py-node-dev
+    build:
+      context: .
+      dockerfile: devcontainer.dockerfile
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+
   flask-app:
     build:
       context: .

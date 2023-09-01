@@ -15,6 +15,9 @@ Success criteria:
 - [x] Records are served in json format.
 - [ ] Datetime fields are in the ISO 8601 format.
 - [ ] Results are paginated.
+  - I decided to paginate these at 100 at a time for a faster query result
+  - [ ] if the url wildcard is beyond the bounds of the avaliable records in the database, redirect url to last possible wildcard option
+  - [ ] if the url wildcard is not a valid type (string, negative number, etc), redirect to first page for possible wildcard
 
 ## Tasks
 
@@ -36,4 +39,4 @@ Success criteria:
 ## Notes
 
 - This one was probably the most annoying, but only because I had to edit the docker instance to play nicely with my machine. That took probably a good 8 hours just to configure docker to work with my machine. I ended up scrapping the dev container and splitting the services into an api container, and a ui container alongsize the database container. it made it easier to read the logs from each server for me and also allowed me to spin up just one server at a time
--
+- it feels really good when docker works correctly
