@@ -14,6 +14,7 @@
 - [ ] The covid data table is paginated. Users may navigate to the `next` or `previous` pages.
 - [x] The user can set "number of rows to display" to 25, 50, or 100
   - this may have been easier to achieve if the split was done purely on the backend, idk, i kinda like it now, but it could be improved
+  - [ ] actually ^ do that
 
 ## Tasks
 
@@ -26,6 +27,7 @@
 - [ ] show nulls as "null"
 - [ ] on click out of page bounds should pull query and build local size
 - [ ] add buttons for last page, first page, etc
+- [ ] split mui components out into their own files
 
 ## Optimizations to try
 
