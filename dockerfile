@@ -8,6 +8,7 @@ RUN apt-get install -y nodejs postgresql-client netcat-traditional
 RUN pip install flask
 RUN pip install flask-cors --upgrade
 RUN pip install psycopg2 --upgrade
+RUN pip install pandas --upgrade
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
