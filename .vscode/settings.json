@@ -2,5 +2,9 @@
   "python.formatting.provider": "none",
   "[python]": {
     "editor.defaultFormatter": "ms-python.autopep8"
+  },
+  "editor.tabSize": 4,
+  "[javascript]":{
+    "editor.tabSize": 2
   }
 }

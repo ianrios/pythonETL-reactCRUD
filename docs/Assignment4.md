@@ -15,6 +15,7 @@
 - [x] The user can set "number of rows to display" to 25, 50, or 100
   - this may have been easier to achieve if the split was done purely on the backend, idk, i kinda like it now, but it could be improved
   - [ ] actually ^ do that
+  - [ ] handle safe division of number of rows per page, keeping first row at the top of the list
 
 ## Tasks
 
@@ -34,6 +35,7 @@
 - [x] show off some react skills? context, etc? - this seems too small to require something like that
 - [ ] localstorage caching?
 - [ ] react testing
+- [ ] set up absolute path for react components
 
 ## Notes
 
