@@ -13,6 +13,11 @@ import '@fontsource/roboto/700.css';
 
 // });
 
+// using file structure borrowed from:
+// https://blog.webdevsimplified.com/2022-07/react-folder-structure/
+
+// using kebab-case file naming conventions:
+// https://www.verytechnology.com/iot-insights/the-design-behind-kebab-case-ing-our-react-apps
 
 ReactDOM.render(
   <React.StrictMode>

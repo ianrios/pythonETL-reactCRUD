@@ -41,6 +41,7 @@ Success criteria:
 - [ ] add index in seed_database.sh....
 - [ ] if the url wildcard is beyond the bounds of the available records in the database, redirect url to last possible wildcard option
 - [ ] if the url wildcard is not a valid type (string, negative number, etc), redirect to first page for possible wildcard
+- [ ] install swagger
 
 ## Notes
 
