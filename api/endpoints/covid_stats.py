@@ -112,3 +112,33 @@ def get_paged_stats(current_page):
 
     except Exception as e:
         return jsonify({"error": str(e)})
+
+
+def format_col(col):
+
+    return {"id": col, "label": col.replace("_", " ").title()}
+
+
+@blueprint.route("/columns", methods=["GET"])
+def get_columns():
+    """Get columns formatted for react table"""
+
+    try:
+        conn = create_connection()
+
+        query = f"""SELECT *
+            FROM covid_state_stats
+            LIMIT 1
+            """
+        single_row_data = sqlio.read_sql_query(query, conn)
+
+        conn.close()
+
+        # should match [{ id: "string", label: "String (units)"},...]
+
+        columns = [format_col(col) for col in single_row_data.columns]
+
+        return jsonify(columns)
+
+    except Exception as e:
+        return jsonify({"error": str(e)})
