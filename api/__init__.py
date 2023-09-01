@@ -4,7 +4,7 @@ from flask_cors import CORS
 
 def create_app() -> Flask:
     """Create and configure flask app"""
-    
+
     # Create flask app.
     app = Flask(__name__)
 
@@ -21,4 +21,3 @@ def _register_blueprints(app: Flask) -> None:
     from .endpoints import covid_stats
 
     app.register_blueprint(covid_stats.blueprint)
-

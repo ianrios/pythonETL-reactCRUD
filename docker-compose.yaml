@@ -12,6 +12,8 @@ services:
     command: flask run --host=0.0.0.0 --port=5001
     environment:
       FLASK_APP: __main__.py
+    env_file:
+      - .env
 
 
   react-app:

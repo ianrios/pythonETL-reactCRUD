@@ -1,7 +1,6 @@
 import os
-import subprocess
-
-from flask import Blueprint, request
+import psycopg2
+from flask import Blueprint, jsonify, request
 
 blueprint = Blueprint("covid_stats", __name__, url_prefix="/covid-stats")
 
@@ -12,24 +11,19 @@ def test_db_connection():
 
     host_arg = request.args.get("host")
 
-    db_host = host_arg if host_arg else "localhost"
+    db_host = host_arg if host_arg else "db"
     db_port = 5432
 
-    result = subprocess.run(
-        f"nc -vw 0 {db_host} {db_port}",
-        shell=True,
-        capture_output=True,
-    )
+    try:
+        conn = psycopg2.connect(
+            dbname=os.getenv("POSTGRES_DB"),
+            user=os.getenv("POSTGRES_USER"),
+            password=os.getenv("POSTGRES_PASSWORD"),
+            host=db_host,
+            port=db_port,
+        )
+        conn.close()
+        return jsonify({"message": "Database connection successful"})
 
-    return {
-        "stdout": result.stdout.decode(),
-        "stderr": result.stderr.decode(),
-    }
-
-
-
-@blueprint.route("/test-flask", methods=["GET"])
-def test_flask():
-    """Establish flask works"""
-
-    return "Flask App Running"
+    except Exception as e:
+        return jsonify({"error": str(e)})
