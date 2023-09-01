@@ -1,17 +1,28 @@
 version: "3.9"
 services:
-  development:
-    image: py-node-dev
+  flask-app:
     build:
       context: .
       dockerfile: dockerfile
     ports:
-      - "3000:3000"
       - "5001:5001"
     volumes:
-      - .:/workspace
-    working_dir: /workspace
-    command: tail -f /dev/null
+      - ./api:/app
+    working_dir: /app
+    command: flask run --host=0.0.0.0 --port=5001
+    environment:
+      FLASK_APP: __main__.py
+
+
+  react-app:
+    image: node:16
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./ui:/app
+    working_dir: /app
+    command: npm start
+
   db:
     image: postgres:14
     env_file:

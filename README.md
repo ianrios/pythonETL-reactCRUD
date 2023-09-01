@@ -100,7 +100,7 @@ with a Postgres database.
 **First**, start the docker container with the provided Postgres database.
 
 ```sh
-$ docker-compose up db
+$ docker compose up db
 ```
 
 Upon container startup, this database will automatically be populated with a `interview_db.covid_state_stats` table.

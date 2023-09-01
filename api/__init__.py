@@ -18,7 +18,7 @@ def create_app() -> Flask:
 
 def _register_blueprints(app: Flask) -> None:
     """Register flask blueprints for routing endpoints"""
-    from api.endpoints import covid_stats
+    from .endpoints import covid_stats
 
     app.register_blueprint(covid_stats.blueprint)
 

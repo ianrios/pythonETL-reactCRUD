@@ -1,9 +1,9 @@
 # Assignment 3 - Working with APIs
 
-
 - [x] start the docker container with the provided Postgres database. `docker-compose up db -d`
-- [ ] database will automatically be populated with a `interview_db.covid_state_stats` table - confirm this and connect to the database to make sure the table is there and has data. 
+- [ ] database will automatically be populated with a `interview_db.covid_state_stats` table - confirm this and connect to the database to make sure the table is there and has data.
 - [x] install the project's dependencies, then run the flask application:
+
 ```sh
 $ python -m api
 
@@ -35,7 +35,6 @@ Success criteria:
 - [ ] Datetime fields are in the ISO 8601 format.
 - [ ] Results are paginated.
 
-
 ## Tasks
 
 - [x] what is flask
@@ -44,9 +43,7 @@ Success criteria:
 - [ ] does flask have a cli to build boilerplate?
 - [ ] get dockerfile to work correctly
 - [ ] connect to db via the covid stats endpoint
-- [ ] get connection to use correct 5001 port, instead of default 5000 port
-
-
+- [x] get api connection to use port 5001
 
 ## Optimizations to try
 
