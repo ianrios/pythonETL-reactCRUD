@@ -1,6 +1,11 @@
 # Assignment 3 - Working with APIs
 
+## Steps for running Assignment 3 code
+
 - Start via `docker compose up --build -d`
+- navigate to `http://localhost:5001/`
+
+## process from readme
 
 - [x] start the docker container with the provided Postgres database. `docker-compose up db -d`
 - [x] database will automatically be populated with a `interview_db.covid_state_stats` table

@@ -44,6 +44,7 @@ outputs_dir = Path(".outputs")
 def parse() -> list[CrimeTypeMetrics]:
     """Parse CSV and pull data"""
 
+    # toggle this to true to speed up results
     FAST_SAVE = False
 
     # create outputs_dir if it does not exist

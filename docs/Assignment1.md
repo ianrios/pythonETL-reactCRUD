@@ -1,6 +1,13 @@
-### Assignment 1: ETL:
+# Assignment 1: ETL:
 
+## Steps for running Assignment 1 code
+
+- Open project in dev container
+- Install requirements via `pip install -r requirements.txt`
+- Make sure you are in the `/workspace` directory and have access to the `/scripts` sub directory
 - Run via `python -m scripts.run_etl`
+
+## Process from readme
 
 - [x] Unzip the data from crime.csv.gz to "data/crime.csv" (this does not have to be done in Python).
 - [x] Update this parse() function to:
@@ -25,16 +32,16 @@ Example:
 - [x] Return a list of CrimeTypeMetric values, sorted from most frequently occurring to least.
   - [x] Occurrences should be calculated based on the number of CrimeTypeData records corresponding to the primary_type.
 
-#### Success Criteria:
+## Success Criteria:
 
 - [x] Running this python module executes the parsing logic and test logic successfully without any errors.
 - [x] run via `python -m scripts.run_etl`
 
-#### Additional Notes:
+## Additional Notes:
 
 - You may use any third party libraries or tools to execute this task but the entrypoint to the ETL process must be executed by Python. You should be able to explain and justify your choices during review. - First focus on getting the right solution and then focus on optimizations, like reducing the number of times the file is read or the number of times the row items are iterated over or the number of records kept in memory. Even if you choose not to make those optimizations, it'll still be good to have a discussion about what could have been done.
 
-##### known sub sort added complexity
+### known sub sort added complexity
 
 ['NON-CRIMINAL', 1, 17]
 ['OTHER NARCOTIC VIOLATION', 15, 3]

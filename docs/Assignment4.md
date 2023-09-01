@@ -1,6 +1,18 @@
 # Assignment 4 - React Table
 
+## Steps for running Assignment 4 code
+
 - Start via `docker compose up --build -d`
+- navigate to `http://localhost:3000/`
+
+## process from readme
+
+- [ ] implement a page displaying information from the api endpoint in [Assignment 3](#assignment-3---working-with-apis). This page does not have to be aesthetically pleasing, but it should have good usability. Though not required, feel free to use any third party tools or libraries to help complete the assignment.
+
+## Success criteria
+
+- [ ] The covid data table is paginated. Users may navigate to the `next` or `previous` pages.
+- [ ] The user can set "number of rows to display" to 25, 50, or 100
 
 ## Tasks
 

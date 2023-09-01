@@ -1,11 +1,16 @@
-### Assignment 2: data modeling and db scripting:
+# Assignment 2: data modeling and db scripting:
 
-- Start db via `docker compose up --build -d`
+## Steps for running Assignment 2 code
+
+- Start db via `docker compose up db -d`
+  - if db container not working try `sudo lsof -i :5432` then `kill <pid>` within regular terminal, not container
 - Run script via `python -m scripts.init_db`
   - use flag `--init` to initialize db with csv file
   - use flag `--query` to query resulting database once populated
   - flags can be combined
   - no flags prints hint
+
+## Process from readme
 
 Must answer the following questions:
 
