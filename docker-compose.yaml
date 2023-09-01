@@ -6,15 +6,11 @@ services:
       dockerfile: dockerfile
     ports:
       - "5001:5001"
-    volumes:
-      - ./api:/app
-    working_dir: /app
-    command: flask run --host=0.0.0.0 --port=5001
     environment:
-      FLASK_APP: __main__.py
+      FLASK_APP: api
+    command: flask run --host=0.0.0.0 --port=5001
     env_file:
       - .env
-
 
   react-app:
     image: node:16
@@ -34,5 +30,6 @@ services:
       - ./sql:/docker-entrypoint-initdb.d
     ports:
       - 5432:5432
+
 volumes:
   db-pgdata:

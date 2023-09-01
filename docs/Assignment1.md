@@ -1,5 +1,7 @@
 ### Assignment 1: ETL:
 
+- Run via `python -m scripts.run_etl`
+
 - [x] Unzip the data from crime.csv.gz to "data/crime.csv" (this does not have to be done in Python).
 - [x] Update this parse() function to:
   - [x] Read the data from "data/crime.csv"
@@ -32,8 +34,6 @@ Example:
 
 - You may use any third party libraries or tools to execute this task but the entrypoint to the ETL process must be executed by Python. You should be able to explain and justify your choices during review. - First focus on getting the right solution and then focus on optimizations, like reducing the number of times the file is read or the number of times the row items are iterated over or the number of records kept in memory. Even if you choose not to make those optimizations, it'll still be good to have a discussion about what could have been done.
 
-
-
 ##### known sub sort added complexity
 
 ['NON-CRIMINAL', 1, 17]
@@ -56,10 +56,16 @@ I believe the correct sub sort is alphabetical.
 - [x] parse data frame from pandas efficiently - resource: https://towardsdatascience.com/efficiently-iterating-over-rows-in-a-pandas-dataframe-7dd5f9992c01
 - [x] save all progress in github for review
 
-
 ## Optimizations
 
 - [x] save speed - the CrimeDataRecord is pretty expensive to use instead of pushing the data frame directy to json
-    - I added a FAST_SAVE toggle to speed up the process by pushing the output directly from the pandas data frame
+  - I added a FAST_SAVE toggle to speed up the process by pushing the output directly from the pandas data frame
 - [ ] use parquet instead of CSV https://pypi.org/project/fastparquet/
-    - seems like overkill
+  - seems like overkill
+
+## Notes
+
+- I think this one was difficult because I rarely do this type of work.
+- It was fun and reminded me of a school assignment.
+- In the end, I don't think it was inherently difficult, just took some time to remember how to do
+- The most annoying part was trying to use the existing code for the pydantic classes and not format the output in a way that was less expensive

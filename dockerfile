@@ -5,11 +5,9 @@ RUN apt-get -y update
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
 RUN apt-get install -y nodejs postgresql-client netcat-traditional
 
-RUN pip install flask
-RUN pip install flask-cors --upgrade
-RUN pip install psycopg2 --upgrade
-RUN pip install pandas --upgrade
+COPY requirements.txt /requirements.txt
+RUN pip install -r requirements.txt
 
-COPY entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+WORKDIR /app
 
+COPY . .

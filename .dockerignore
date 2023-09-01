@@ -1,0 +1,11 @@
+# Exclude files
+.git
+data/crime.csv.gz
+requirements-old.txt
+
+# Exclude directories
+.devcontainer/
+.outputs/
+.vscode/
+docs/
+ui/

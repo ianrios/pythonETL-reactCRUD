@@ -2,6 +2,9 @@ import os
 import psycopg2
 import pandas.io.sql as sqlio
 from flask import Blueprint, jsonify, request
+import warnings
+
+warnings.simplefilter(action='ignore', category=UserWarning)
 
 blueprint = Blueprint("covid_stats", __name__, url_prefix="/covid-stats")
 
@@ -29,9 +32,9 @@ def test_db_connection():
         return jsonify({"error": str(e)})
 
 
-@blueprint.route("/get-stats", methods=["GET"])
-def get_stats():
-    """Get COVID stats"""
+@blueprint.route("/all", methods=["GET"])
+def get_all_stats():
+    """Get all COVID stats"""
 
     host_arg = request.args.get("host")
 
