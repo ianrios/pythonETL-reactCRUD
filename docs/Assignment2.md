@@ -51,3 +51,9 @@ Must answer the following questions:
 
 - [ ] create example python script with user inputs using invoke with all the different SQL queries tested and described
 - [ ] use an orm instead of python sql
+
+
+## Other Query Ideas
+- unique crime types by location
+- top 10 most common FBI codes
+- arrest rate comparison between different crime types
