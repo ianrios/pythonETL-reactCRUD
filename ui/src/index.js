@@ -1,13 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './components/app';
+
 import reportWebVitals from './reportWebVitals';
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import './index.css';
+
+import App from './components/app';
+
+import { AppProvider } from './context/app-context';
+
 
 // const theme = createTheme({
 
@@ -22,7 +27,9 @@ import '@fontsource/roboto/700.css';
 ReactDOM.render(
   <React.StrictMode>
     {/* <ThemeProvider theme={theme}> */}
-    <App />
+    <AppProvider>
+      <App />
+    </AppProvider>
     {/* </ThemeProvider> */}
   </React.StrictMode>,
   document.getElementById('root')
