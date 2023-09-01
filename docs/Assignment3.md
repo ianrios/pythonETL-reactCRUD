@@ -40,6 +40,7 @@ Success criteria:
 ## Optimizations to try
 
 - [ ] use orm?
+- [ ] add index in seed_database.sh....
 
 ## Notes
 

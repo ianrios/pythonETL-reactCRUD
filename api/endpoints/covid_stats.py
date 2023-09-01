@@ -1,5 +1,6 @@
 import os
 import psycopg2
+import pandas as pd
 import pandas.io.sql as sqlio
 from flask import Blueprint, jsonify, request
 import warnings
@@ -52,18 +53,38 @@ def get_all_stats():
         return jsonify({"error": str(e)})
 
 
-@blueprint.route("/page/<int:page_num>", methods=["GET"])
-def get_paged_stats(page_num):
+@blueprint.route("/page", methods=["GET"])
+def page_index():
+    """Info about pagination"""
+
+    return """Usage: http://localhost:5001/covid-stats/page/4 to return page four of the results - grouped 100 results at a a time, so result ids 400-499"""
+
+
+@blueprint.route("/page/<int:current_page>", methods=["GET"])
+def get_paged_stats(current_page):
     """Get all COVID stats"""
 
     try:
         conn = create_connection()
 
-        query = f"SELECT * FROM covid_state_stats LIMIT 50"
+        page_size = 100
+        offset = page_size * current_page
+
+        query = f"""SELECT *
+            FROM covid_state_stats
+            ORDER BY date
+            LIMIT {page_size}
+            OFFSET {offset}
+            """
         paged_data = sqlio.read_sql_query(query, conn)
 
+        json_data = paged_data.to_json(orient='records', date_format='iso')
+
+        #
+
         conn.close()
-        return jsonify({"query": query, "results": paged_data.to_json()})
+
+        return jsonify({"query": query, "results": json_data})
 
     except Exception as e:
         return jsonify({"error": str(e)})
