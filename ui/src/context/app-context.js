@@ -29,6 +29,7 @@ const AppWorker = () => {
     // init page size and total number rows
     useEffect(() => {
         getCurrPageSize();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // get columns
@@ -64,12 +65,14 @@ const AppWorker = () => {
     // reload page if limit changes
     useEffect(() => {
         getPage({ page })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [limit]);
 
 
     // init first page on load of app
     useEffect(() => {
         if (currentPagedData.length === 0) getPage({})
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPagedData]);
 
     // set new limit for future use

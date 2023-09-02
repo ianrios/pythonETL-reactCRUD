@@ -3,12 +3,12 @@ import Box from "@mui/material/Box";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
 
-import Toolbar from "./table/toolbar";
-import Header from "./table/header";
-import Body from "./table/body";
-import Pagination from "./table/pagination";
+import Toolbar from "./toolbar";
+import Header from "./header";
+import Body from "./body";
+import Pagination from "./pagination";
 
-import { useAppContext } from "../context/app-context";
+import { useAppContext } from "../../context/app-context";
 
 const StatsTable = () => {
   const { columns, currentPagedData } = useAppContext();

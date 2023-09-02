@@ -1,7 +1,5 @@
 import TableHead from "@mui/material/TableHead";
-import TableSortLabel from "@mui/material/TableSortLabel";
 import { TableCell, TableRow } from "@mui/material";
-
 import { useAppContext } from "../../context/app-context";
 
 const Header = () => {
@@ -15,7 +13,7 @@ const Header = () => {
       <TableRow>
         {columns.map((column, i) => (
           <TableCell key={i} align={"left"} padding="normal">
-            <TableSortLabel>{column.label}</TableSortLabel>
+            {column.label}
           </TableCell>
         ))}
       </TableRow>

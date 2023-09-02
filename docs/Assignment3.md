@@ -3,7 +3,10 @@
 ## Steps for running Assignment 3 code
 
 - Start via `docker compose up --build -d`
-- navigate to `http://localhost:5001/`
+- navigate to `http://localhost:5001/columns`
+- navigate to `http://localhost:5001/all`
+- navigate to `http://localhost:5001/page`
+- page around via `http://localhost:5001/page/34`
 
 ## process from readme
 
