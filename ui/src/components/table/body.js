@@ -4,15 +4,14 @@ import TableCell from "@mui/material/TableCell";
 import { useAppContext } from "../../context/app-context";
 
 const Body = () => {
-  const { columns, currentPagedData, limit, pageIndex } = useAppContext();
+  const { columns, currentPagedData, limit, page } = useAppContext();
 
   const emptyRows =
-    pageIndex > 0 ? Math.max(0, (1 + pageIndex) * limit - currentPagedData.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * limit - currentPagedData.length) : 0;
 
   return (
     <TableBody>
       {currentPagedData
-        // .slice(pageIndex * limit, pageIndex * limit + limit)
         .map((row, index) => {
           const labelId = `enhanced-table-checkbox-${index}`;
           return (

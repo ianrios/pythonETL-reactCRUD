@@ -11,10 +11,10 @@
 
 ## Success criteria
 
-- [ ] The covid data table is paginated. Users may navigate to the `next` or `previous` pages.
+- [x] The covid data table is paginated. Users may navigate to the `next` or `previous` pages.
 - [x] The user can set "number of rows to display" to 25, 50, or 100
   - this may have been easier to achieve if the split was done purely on the backend, idk, i kinda like it now, but it could be improved
-  - [ ] actually ^ do that
+  - [x] actually ^ do that
   - [ ] handle safe division of number of rows per page, keeping first row at the top of the list
 
 ## Tasks
@@ -25,10 +25,10 @@
 - [x] install packages (mui, virtualized, axios?)
 - [x] choose a couple example mui tables to combine into one
 - [x] combine current page, and total pages possible with current rows displayed to format pagination footer
-- [ ] show nulls as "null"
-- [ ] on click out of page bounds should pull query and build local size
-- [ ] add buttons for last page, first page, etc
-- [ ] split mui components out into their own files
+- [x] show nulls as "null"
+- [x] on click out of page bounds should pull query and build local size
+- [x] add buttons for last page, first page, etc
+- [x] split mui components out into their own files
 
 ## Optimizations to try
 

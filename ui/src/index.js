@@ -13,10 +13,6 @@ import App from "./components/app";
 
 import { AppProvider } from "./context/app-context";
 
-// const theme = createTheme({
-
-// });
-
 // using file structure borrowed from:
 // https://blog.webdevsimplified.com/2022-07/react-folder-structure/
 

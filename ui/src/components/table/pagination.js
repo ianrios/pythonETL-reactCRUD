@@ -8,6 +8,7 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import { useAppContext } from "../../context/app-context";
 
 
+
 function TablePaginationActions(props) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -63,21 +64,29 @@ function TablePaginationActions(props) {
 }
 
 const Pagination = () => {
-  const { rows, limitsArr, currentLimit, setNewLimit, pageIndex, getPage, totalAvailablePages } = useAppContext();
+  const {
+    rows,
+    limitsArr,
+    limit,
+    setNewLimit,
+    page,
+    getPage,
+    totalAvailablePages,
+  } = useAppContext();
 
   const handleChangePageReducer = (nextState) => {
     switch (nextState) {
       case 'first':
-        getPage(0)
+        getPage({ page: 0 })
         break;
       case 'prev':
-        getPage(pageIndex - 1)
+        getPage({ page: page - 1 })
         break;
       case 'next':
-        getPage(pageIndex + 1)
+        getPage({ page: page + 1 })
         break;
       case 'last':
-        getPage(totalAvailablePages)
+        getPage({ page: totalAvailablePages })
         break;
       default:
         console.log("didn't match any case")
@@ -95,8 +104,8 @@ const Pagination = () => {
       colSpan={3}
       component="div"
       count={rows}
-      rowsPerPage={currentLimit}
-      page={pageIndex}
+      rowsPerPage={limit}
+      page={page}
       SelectProps={{
         inputProps: {
           'aria-label': 'rows per page',

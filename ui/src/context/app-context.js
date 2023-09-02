@@ -8,16 +8,15 @@ const AppWorker = () => {
     const [rows, setRows] = useState(0);
     const [totalAvailablePages, setTotalAvailablePages] = useState(0);
     const limitsArr = [25, 50, 100]; // limit can only be one from the limitsArr to avoid any mistakes
-    const [limitIndex, setLimitIndex] = useState(0);
-    const [currentLimit, setCurrentLimit] = useState(limitsArr[limitIndex]);
-    const [pageIndex, setPageIndex] = useState(0) // initially we are at the 0 index on load
+    const [limit, setLimit] = useState(limitsArr[0]); // initially use the 0 index just to grab the correct limit
+    const [page, setPage] = useState(0) // initially we are at the 0 page on load
     const [offset, setOffset] = useState(0); // can be 0, 25, 50, or 75
     const [columns, setColumns] = useState([]);
     const [currentPagedData, setCurrentPagedData] = useState([]);
 
     // get number of pages and rows for future use
     const getCurrPageSize = (newLimit = 0) => {
-        const useLimit = newLimit ? newLimit : currentLimit;
+        const useLimit = newLimit ? newLimit : limit;
         const url = `covid-stats/pages/${useLimit}`;
         axiosHelper({
             url,
@@ -39,39 +38,43 @@ const AppWorker = () => {
     }, []);
 
     // get a page from the db
-    const getPage = (page = 0) => {
+    const getPage = ({ page = 0 }) => {
         // with no params, returns very first page
         // otherwise you can configure as needed
 
-        const url = `covid-stats/exact-page/${page}/limit/${currentLimit}/offset/${offset}`;
+        // calculate the new page using the current offsets and limit, comparing them to the previous page
+
+        const url = `covid-stats/exact-page/${page}/limit/${limit}/offset/${offset}`;
         axiosHelper({
             url,
             successMethod: (d) => {
                 setCurrentPagedData(JSON.parse(d.data.results));
-                console.log({ page, currentLimit, offset, totalAvailablePages })
-                setPageIndex(page)
+
+                setPage(page)
+                // setOffset(offset)
+                // setNewLimit(limit)
+
+                // const topRow = (page * limit) + offset
             },
         });
     };
 
+
+
+    // reload page if limit changes
     useEffect(() => {
-        console.log('changed current limit or offset')
-        getPage(pageIndex)
-    }, [currentLimit, offset])
+        getPage({ page })
+    }, [limit]);
 
 
     // init first page on load of app
     useEffect(() => {
-        if (currentPagedData.length === 0) {
-            getPage();
-        }
+        if (currentPagedData.length === 0) getPage({})
     }, [currentPagedData]);
 
     // set new limit for future use
     const setNewLimit = (newLimit) => {
-
-        setLimitIndex(limitsArr.findIndex(l => l === newLimit));
-        setCurrentLimit(newLimit);
+        setLimit(newLimit);
         getCurrPageSize(newLimit);
     };
 
@@ -80,11 +83,11 @@ const AppWorker = () => {
         rows,
         totalAvailablePages,
         limitsArr,
-        currentLimit,
+        limit,
         setNewLimit,
         offset,
         setOffset,
-        pageIndex,
+        page,
         getPage,
 
         // for displaying correctly

@@ -7,8 +7,8 @@ import { useAppContext } from "../../context/app-context";
 const Header = () => {
   const { columns } = useAppContext();
 
-  // commented out filter data from MUI - not very useful for a table this small that is getting all its data from the backend
-  // TODO: create filter methods for the backend queries
+  // TODO: create filter and sort methods for the backend queries with MUI components
+  // may need to pass in specific filter by and sort by options to backend
 
   return (
     <TableHead>
